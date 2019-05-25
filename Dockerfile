@@ -2,16 +2,13 @@ FROM alpine:latest
 
 RUN apk update \
     && apk upgrade \
-    && apk add --no-cache nginx bash\
-    && adduser -D -g 'www' www \
-    && mkdir /www \
-    && mkdir -p /run/nginx/ \
-    && chown -R www:www /var/lib/nginx \
-    && chown -R www:www /www
+    && apk add --no-cache python py-pip bash\
+    && mkdir /porter 
+# install Pyton Flask addon
+RUN pip install Flask
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY index.html /www
+COPY port5000.py /porter/port5000.py
 
-EXPOSE 80
+EXPOSE 5000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["python", "/porter/port5000.py"]
